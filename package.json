@@ -8,11 +8,13 @@
     "npm": "6.6.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^2.0.0"
   }
 }
