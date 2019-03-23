@@ -26,17 +26,31 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback'
     },
-    (accessToken, refreshToken, profile, done) => {
-      console.log(profile.displayName, '👿');
-      User.findOne({ googleID: profile.id }).then(existingUser => {
-        if (existingUser) {
-          done(null, existingUser);
-        } else {
-          new User({ googleID: profile.id, name: profile.displayName })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+    // (accessToken, refreshToken, profile, done) => {
+    //   console.log(profile.displayName, '👿');
+    //   User.findOne({ googleID: profile.id }).then(existingUser => {
+    //     if (existingUser) {
+    //       done(null, existingUser);
+    //     } else {
+    //       new User({ googleID: profile.id, name: profile.displayName })
+    //         .save()
+    //         .then(user => done(null, user));
+    //     }
+    //   });
+    // }
+    //refactor promise with async es7
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleID: profile.id });
+      //existingUser is the returned resolved promise
+      if (existingUser) {
+        done(null, existingUser);
+      } else {
+        const newUser = await new User({
+          googleID: profile.id,
+          name: profile.displayName
+        }).save();
+        done(null, newUser);
+      }
     }
   )
 );
