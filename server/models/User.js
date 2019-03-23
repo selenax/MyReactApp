@@ -6,5 +6,5 @@ const userSchema = new Schema({
   name: String
 });
 
-//create new collection with model
+//create new collection with model command
 mongoose.model('users', userSchema);
