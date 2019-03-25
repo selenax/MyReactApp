@@ -4,12 +4,8 @@ import { NavLink, withRouter, Redirect, Link } from 'react-router-dom';
 import {
   Button,
   Container,
-  Divider,
-  Grid,
   Header,
   Icon,
-  Image,
-  List,
   Menu,
   Responsive,
   Segment,
@@ -95,11 +91,16 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  <a href="/auth/google">
-                    <Button as="a" inverted={!fixed}>
-                      Log in
-                    </Button>
-                  </a>
+                  <Button
+                    as="a"
+                    href="/auth/google"
+                    inverted={!fixed}
+                    primary={fixed}
+                    style={{ marginLeft: '0.5em' }}
+                  >
+                    Log in
+                  </Button>
+
                   <Button
                     as="a"
                     inverted={!fixed}
@@ -155,10 +156,10 @@ class MobileContainer extends Component {
           </Menu.Item>
           <Menu.Item as="a">Work</Menu.Item>
           <Menu.Item as="a">Company</Menu.Item>
-          <Menu.Item as="a">Careers</Menu.Item>
-          <a href="/auth/google">
-            <Menu.Item as="a">Log in</Menu.Item>
-          </a>
+          <Menu.Item as="a">Careers</Menu.Item>=
+          <Menu.Item as="a" href="/auth/google">
+            Log in
+          </Menu.Item>
           <Menu.Item as="a">Sign Up</Menu.Item>
         </Sidebar>
 
@@ -175,11 +176,15 @@ class MobileContainer extends Component {
                   <Icon name="sidebar" />
                 </Menu.Item>
                 <Menu.Item position="right">
-                  <a href="/auth/google">
-                    <Button as="a" inverted>
-                      Log in
-                    </Button>
-                  </a>
+                  <Button
+                    as="a"
+                    href="/auth/google"
+                    inverted
+                    style={{ marginLeft: '0.5em' }}
+                  >
+                    Log in
+                  </Button>
+
                   <Button as="a" inverted style={{ marginLeft: '0.5em' }}>
                     Sign Up
                   </Button>
