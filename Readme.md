@@ -1,3 +1,4 @@
-npm install
+To start the app
 
-npm run dev
+1. client dir: npm install
+2. server dir: npm install, npm run dev
