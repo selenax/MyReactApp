@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavLink, withRouter, Redirect, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
   Button,
   Container,
@@ -62,6 +63,7 @@ class DesktopContainer extends Component {
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
+    console.log(this.props, 'desktopContainer 😛');
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -136,7 +138,7 @@ class MobileContainer extends Component {
   render() {
     const { children } = this.props;
     const { sidebarOpened } = this.state;
-
+    console.log(this.props, 'mobileContainer 😛');
     return (
       <Responsive
         as={Sidebar.Pushable}
@@ -218,4 +220,12 @@ ResponsiveContainer.propTypes = {
 
 const NavBar = () => <ResponsiveContainer />;
 
-export default withRouter(NavBar);
+// function mapStateToProps(state) {
+//   return { auth: state.auth };
+// }
+
+//refactor
+function mapStateToProps({ auth }) {
+  return { auth };
+}
+export default connect(mapStateToProps)(NavBar);
