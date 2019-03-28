@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { NavLink, withRouter, Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { NavLink, withRouter, Redirect, Link } from 'react-router-dom';
+
 import {
   Button,
   Container,
@@ -60,10 +61,19 @@ class DesktopContainer extends Component {
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
+  renderContent() {
+    switch (this.props.auth) {
+      case null:
+        return;
+      case false:
+        return 'logged out';
+      default:
+        return 'logged in';
+    }
+  }
   render() {
     const { children } = this.props;
     const { fixed } = this.state;
-    console.log(this.props, 'desktopContainer 😛');
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -93,7 +103,7 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  <Button
+                  {/* <Button
                     as="a"
                     href="/auth/google"
                     inverted={!fixed}
@@ -101,8 +111,8 @@ class DesktopContainer extends Component {
                     style={{ marginLeft: '0.5em' }}
                   >
                     Log in
-                  </Button>
-
+                  </Button> */}
+                  {this.renderContent()}
                   <Button
                     as="a"
                     inverted={!fixed}
@@ -138,7 +148,7 @@ class MobileContainer extends Component {
   render() {
     const { children } = this.props;
     const { sidebarOpened } = this.state;
-    console.log(this.props, 'mobileContainer 😛');
+
     return (
       <Responsive
         as={Sidebar.Pushable}
@@ -218,7 +228,13 @@ ResponsiveContainer.propTypes = {
   children: PropTypes.node
 };
 
-const NavBar = () => <ResponsiveContainer />;
+class NavBar extends Component {
+  render() {
+    console.log(this.props, '🤓🤓🤓');
+
+    return <ResponsiveContainer />;
+  }
+}
 
 // function mapStateToProps(state) {
 //   return { auth: state.auth };
@@ -228,4 +244,5 @@ const NavBar = () => <ResponsiveContainer />;
 function mapStateToProps({ auth }) {
   return { auth };
 }
+
 export default connect(mapStateToProps)(NavBar);
