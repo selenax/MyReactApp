@@ -56,8 +56,13 @@ HomepageHeading.propTypes = {
 };
 
 class DesktopContainer extends Component {
-  state = {};
+  state = {
+    isLogged: null
+  };
 
+  componentDidMount() {
+    this.renderContent();
+  }
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
@@ -66,14 +71,15 @@ class DesktopContainer extends Component {
       case null:
         return;
       case false:
-        return 'logged out';
+        this.setState({ isLogged: false });
+        break;
       default:
-        return 'logged in';
+        this.setState({ isLogged: true });
     }
   }
   render() {
     const { children } = this.props;
-    const { fixed } = this.state;
+    const { fixed, isLogged } = this.state;
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -103,16 +109,17 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  {/* <Button
-                    as="a"
-                    href="/auth/google"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: '0.5em' }}
-                  >
-                    Log in
-                  </Button> */}
-                  {this.renderContent()}
+                  {isLogged && (
+                    <Button
+                      as="a"
+                      href="/auth/google"
+                      inverted={!fixed}
+                      primary={fixed}
+                      style={{ marginLeft: '0.5em' }}
+                    >
+                      Log in
+                    </Button>
+                  )}
                   <Button
                     as="a"
                     inverted={!fixed}
