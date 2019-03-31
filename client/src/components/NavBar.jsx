@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink, withRouter, Redirect, Link } from 'react-router-dom';
-
 import {
   Button,
   Container,
@@ -56,30 +54,32 @@ HomepageHeading.propTypes = {
 };
 
 class DesktopContainer extends Component {
-  state = {
-    isLogged: null
-  };
-
-  componentDidMount() {
-    this.renderContent();
+  constructor(props) {
+    super(props);
+    this.state = {
+      auth: null
+    };
   }
+
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
-  renderContent() {
-    switch (this.props.auth) {
+  renderContent = () => {
+    switch (this.props.isAuth) {
       case null:
         return;
       case false:
-        this.setState({ isLogged: false });
-        break;
+        return this.setState({ auth: false });
       default:
-        this.setState({ isLogged: true });
+        return this.setState({ auth: true });
     }
-  }
+  };
+
   render() {
-    const { children } = this.props;
-    const { fixed, isLogged } = this.state;
+    const { isAuth } = this.props;
+    const { fixed } = this.state;
+
+    console.log(this.props.isAuth, '🍓🍓🍓');
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -109,36 +109,19 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  {!isLogged && (
+                  {!isAuth ? (
                     <Button
                       as="a"
                       href="/auth/google"
+                      onClick={this.renderContent}
                       inverted={!fixed}
-                      primary={fixed}
-                      style={{ marginLeft: '0.5em' }}
                     >
                       Log in
                     </Button>
-                  )}
-                  {isLogged && (
-                    <Button
-                      as="a"
-                      href="/auth/google"
-                      inverted={!fixed}
-                      primary={fixed}
-                      style={{ marginLeft: '0.5em' }}
-                    >
+                  ) : (
+                    <Button as="a" href="/api/logout" inverted={!fixed}>
                       Log out
-                    </Button>
-                  )}
-                  {!isLogged && (
-                    <Button
-                      as="a"
-                      inverted={!fixed}
-                      primary={fixed}
-                      style={{ marginLeft: '0.5em' }}
-                    >
-                      Sign Up
+                      {console.log(isAuth, 'clicked logout 💟💟')}
                     </Button>
                   )}
                 </Menu.Item>
@@ -147,8 +130,6 @@ class DesktopContainer extends Component {
             <HomepageHeading />
           </Segment>
         </Visibility>
-
-        {children}
       </Responsive>
     );
   }
@@ -159,14 +140,29 @@ DesktopContainer.propTypes = {
 };
 
 class MobileContainer extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   handleSidebarHide = () => this.setState({ sidebarOpened: false });
-
   handleToggle = () => this.setState({ sidebarOpened: true });
 
+  renderContent = () => {
+    switch (this.props.isAuth) {
+      case null:
+        return;
+      case false:
+        console.log('log out clicked');
+
+        return this.setState({ auth: false });
+      default:
+        return this.setState({ auth: true });
+    }
+  };
+
   render() {
-    const { children } = this.props;
+    const { isAuth } = this.props;
     const { sidebarOpened } = this.state;
 
     return (
@@ -188,11 +184,16 @@ class MobileContainer extends Component {
           </Menu.Item>
           <Menu.Item as="a">Work</Menu.Item>
           <Menu.Item as="a">Company</Menu.Item>
-          <Menu.Item as="a">Careers</Menu.Item>=
-          <Menu.Item as="a" href="/auth/google">
-            Log in
-          </Menu.Item>
-          <Menu.Item as="a">Sign Up</Menu.Item>
+          <Menu.Item as="a">Careers</Menu.Item>
+          {!isAuth ? (
+            <Menu.Item as="a" href="/auth/google" onClick={this.renderContent}>
+              Log in
+            </Menu.Item>
+          ) : (
+            <Menu.Item as="a" href="/api/logout">
+              Log out
+            </Menu.Item>
+          )}
         </Sidebar>
 
         <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -208,59 +209,53 @@ class MobileContainer extends Component {
                   <Icon name="sidebar" />
                 </Menu.Item>
                 <Menu.Item position="right">
-                  <Button
-                    as="a"
-                    href="/auth/google"
-                    inverted
-                    style={{ marginLeft: '0.5em' }}
-                  >
-                    Log in
-                  </Button>
-
-                  <Button as="a" inverted style={{ marginLeft: '0.5em' }}>
-                    Sign Up
-                  </Button>
+                  {!isAuth ? (
+                    <Button
+                      as="a"
+                      href="/auth/google"
+                      onClick={this.renderContent}
+                      inverted
+                    >
+                      Log in
+                    </Button>
+                  ) : (
+                    <Button
+                      as="a"
+                      href={'/api/logout'}
+                      inverted
+                      style={{ marginLeft: '0.5em' }}
+                    >
+                      Log out
+                    </Button>
+                  )}
                 </Menu.Item>
               </Menu>
             </Container>
             <HomepageHeading mobile />
           </Segment>
-
-          {children}
         </Sidebar.Pusher>
       </Responsive>
     );
   }
 }
 
-MobileContainer.propTypes = {
-  children: PropTypes.node
-};
-
-const ResponsiveContainer = ({ children }) => (
-  <div>
-    <DesktopContainer>{children}</DesktopContainer>
-    <MobileContainer>{children}</MobileContainer>
-  </div>
-);
-
-ResponsiveContainer.propTypes = {
-  children: PropTypes.node
-};
-
 class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
-    console.log(this.props, '🤓🤓🤓');
-
-    return <ResponsiveContainer />;
+    console.log(this.props.auth, '🔴🔴🔴');
+    const { auth } = this.props;
+    return (
+      <div>
+        <DesktopContainer isAuth={auth} />
+        <MobileContainer isAuth={auth} />
+      </div>
+    );
   }
 }
 
-// function mapStateToProps(state) {
-//   return { auth: state.auth };
-// }
-
-//refactor
 function mapStateToProps({ auth }) {
   return { auth };
 }
