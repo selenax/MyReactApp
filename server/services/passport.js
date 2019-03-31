@@ -43,14 +43,13 @@ passport.use(
       const existingUser = await User.findOne({ googleID: profile.id });
       //existingUser is the returned resolved promise
       if (existingUser) {
-        done(null, existingUser);
-      } else {
-        const newUser = await new User({
-          googleID: profile.id,
-          name: profile.displayName
-        }).save();
-        done(null, newUser);
+        return done(null, existingUser);
       }
+      const newUser = await new User({
+        googleID: profile.id,
+        name: profile.displayName
+      }).save();
+      done(null, newUser);
     }
   )
 );
