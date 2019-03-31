@@ -109,7 +109,7 @@ class DesktopContainer extends Component {
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
                 <Menu.Item position="right">
-                  {isLogged && (
+                  {!isLogged && (
                     <Button
                       as="a"
                       href="/auth/google"
@@ -120,14 +120,27 @@ class DesktopContainer extends Component {
                       Log in
                     </Button>
                   )}
-                  <Button
-                    as="a"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: '0.5em' }}
-                  >
-                    Sign Up
-                  </Button>
+                  {isLogged && (
+                    <Button
+                      as="a"
+                      href="/auth/google"
+                      inverted={!fixed}
+                      primary={fixed}
+                      style={{ marginLeft: '0.5em' }}
+                    >
+                      Log out
+                    </Button>
+                  )}
+                  {!isLogged && (
+                    <Button
+                      as="a"
+                      inverted={!fixed}
+                      primary={fixed}
+                      style={{ marginLeft: '0.5em' }}
+                    >
+                      Sign Up
+                    </Button>
+                  )}
                 </Menu.Item>
               </Container>
             </Menu>
