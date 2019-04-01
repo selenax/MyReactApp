@@ -12,10 +12,10 @@ require('./services/passport.js');
 
 mongoose.connect(keys.mongoURI);
 
-//Middlewares
+// Middlewares
 const app = express();
 
-//parse incoming request bodies, assign to req.body
+// parse incoming request bodies, assign to req.body
 app.use(bodyParser.json());
 
 app.use(
@@ -30,8 +30,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//authRoutes returns a function
+// authRoutes returns a function
 require('./routes/authRoutes.js')(app);
+
+// if no route handler from incoming request, look in client/build dir
+app.use(express.static('client/build'));
+
+// if can't find route in client/build dir, serve up index.html
+const path = require('path');
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 // app.use(
 //   '/graphql',
