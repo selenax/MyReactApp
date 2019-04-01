@@ -5,13 +5,18 @@ const cookieSession = require('cookie-session');
 const graphqlHttp = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolver');
+const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
 require('./services/passport.js');
 
 mongoose.connect(keys.mongoURI);
 
+//Middlewares
 const app = express();
+
+//parse incoming request bodies, assign to req.body
+app.use(bodyParser.json());
 
 app.use(
   cookieSession({
