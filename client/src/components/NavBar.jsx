@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Container,
@@ -12,6 +13,8 @@ import {
   Sidebar,
   Visibility
 } from 'semantic-ui-react';
+
+import Payment from './Payment.jsx';
 
 const getWidth = () => {
   const isSSR = typeof window === 'undefined';
@@ -65,6 +68,7 @@ class DesktopContainer extends Component {
   showFixedMenu = () => this.setState({ fixed: true });
 
   renderContent = () => {
+    console.log(this.props.isAuth, '🍓🍓🍓');
     switch (this.props.isAuth) {
       case null:
         return;
@@ -78,8 +82,6 @@ class DesktopContainer extends Component {
   render() {
     const { isAuth } = this.props;
     const { fixed } = this.state;
-
-    console.log(this.props.isAuth, '🍓🍓🍓');
 
     return (
       <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
@@ -102,12 +104,19 @@ class DesktopContainer extends Component {
               size="large"
             >
               <Container>
-                <Menu.Item as="a" active>
+                <Menu.Item active as={Link} to={isAuth ? '/homepage' : '/'}>
                   Home
                 </Menu.Item>
+
                 <Menu.Item as="a">Work</Menu.Item>
                 <Menu.Item as="a">Company</Menu.Item>
                 <Menu.Item as="a">Careers</Menu.Item>
+                {isAuth && (
+                  <Menu.Item as="a">
+                    <Payment />
+                  </Menu.Item>
+                )}
+
                 <Menu.Item position="right">
                   {!isAuth ? (
                     <Button
@@ -135,10 +144,6 @@ class DesktopContainer extends Component {
   }
 }
 
-DesktopContainer.propTypes = {
-  children: PropTypes.node
-};
-
 class MobileContainer extends Component {
   constructor(props) {
     super(props);
@@ -153,8 +158,6 @@ class MobileContainer extends Component {
       case null:
         return;
       case false:
-        console.log('log out clicked');
-
         return this.setState({ auth: false });
       default:
         return this.setState({ auth: true });
@@ -179,7 +182,7 @@ class MobileContainer extends Component {
           vertical
           visible={sidebarOpened}
         >
-          <Menu.Item as="a" active>
+          <Menu.Item active as={Link} to={isAuth ? '/homepage' : '/'}>
             Home
           </Menu.Item>
           <Menu.Item as="a">Work</Menu.Item>
